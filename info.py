@@ -13,7 +13,7 @@ USERBOT_STRING_SESSION = 'BQAFUYDEHtMiZWocKu5762avgI1rUfRqEXdSRnCjItXqSpzDifoGSW
 
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
-USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', False))
+USE_CAPTION_FILTER = True
 
 # Admins, Channels & Users
 ADMINS = [6113550151]
