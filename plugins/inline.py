@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 cache_time = 0 if AUTH_USERS or AUTH_CHANNEL else CACHE_TIME
 
 
+
 @Client.on_inline_query(filters.user(AUTH_USERS) if AUTH_USERS else None)
 async def answer(bot, query):
     """Show search results for given inline query"""
@@ -25,7 +26,7 @@ async def answer(bot, query):
         )
         return
 
-    results = []
+    results = [] 
     if '|' in query.query:
         text, file_type = query.query.split('|', maxsplit=1)
         text = text.strip()
@@ -36,10 +37,13 @@ async def answer(bot, query):
 
     offset = int(query.offset or 0)
     reply_markup = get_reply_markup(bot.username, query=text)
-    files, next_offset = await get_search_results(text, file_type=file_type, max_results=10, offset=offset)
-
-    for file in files:
-        results.append(
+    files, next_offset = await get_search_results(text, 
+                            file_type=file_type, max_results=10, offset=offset)
+    file_results, file_next_offset = await get_file_results(text, file_type)
+    results.extend(file_results) 
+    if not file_results:
+        for file in files:
+            results.append(
             InlineQueryResultCachedDocument(
                 title=file.file_name,
                 document_file_id=file.file_id,
@@ -59,9 +63,11 @@ async def answer(bot, query):
             cache_time=cache_time,
             switch_pm_text=switch_pm_text,
             switch_pm_parameter="start",
-            next_offset=str(next_offset)
+            # next_offset=str(max(next_offset, file_next_offset))
+            next_offset=str(file_next_offset)
         )
-    else:
+    else: 
+        # ....
 
         switch_pm_text = f'{emoji.CROSS_MARK} No results'
         if text:
