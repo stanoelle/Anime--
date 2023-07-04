@@ -12,7 +12,12 @@ logger = logging.getLogger(__name__)
 cache_time = 0 if AUTH_USERS or AUTH_CHANNEL else CACHE_TIME
 
 
-
+def get_file_results(text, file_type):
+    files = [] # get files from database based on name 
+    next_offset = 0
+    # Add logic to get files from DB and add to `files`
+    # Set next_offset to pagination offset 
+    return files, next_offset
 @Client.on_inline_query(filters.user(AUTH_USERS) if AUTH_USERS else None)
 async def answer(bot, query):
     """Show search results for given inline query"""
